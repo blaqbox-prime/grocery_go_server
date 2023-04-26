@@ -1,6 +1,7 @@
 package com.pk.grocery_go_server.Models;
 
 import lombok.ToString;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
@@ -17,11 +18,16 @@ public class Product{
         this._id = _id;
     }
 
+    @Id
     private String _id;
     private String name;
     private String description;
     private double price;
     private String category;
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
     private String imageUrl;
 
     private Inventory inventory;
@@ -65,10 +71,6 @@ public class Product{
 
     public double getPrice() {
         return price;
-    }
-
-    public void setPrice(float price) {
-        this.price = price;
     }
 
     public String getCategory() {

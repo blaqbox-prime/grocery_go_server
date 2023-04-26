@@ -3,6 +3,7 @@ package com.pk.grocery_go_server.Controllers;
 import com.pk.grocery_go_server.Models.Inventory;
 import com.pk.grocery_go_server.Models.Product;
 import com.pk.grocery_go_server.Repositories.ProductRepository;
+import com.pk.grocery_go_server.Services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,13 +18,8 @@ public class ProductController {
 
     @Autowired
     ProductRepository repo;
-
-//    Get All products
-    @GetMapping( "/")
-    public List<Product> getAllProducts(){
-        System.out.println("Entry point hit!!");
-        return repo.findAll();
-    }
+    @Autowired
+    ProductService productService;
 
 //    Get Product by Id
     public Optional<Product> getProductById(@RequestBody String productId){
@@ -33,28 +29,30 @@ public class ProductController {
     }
 
     @PostMapping(path = "/add-product")
-    public ResponseEntity addProduct(@RequestBody Map<String,Object> body){
-
-        System.out.println(body.get("inventory"));
-        Map<String,Object> invMap = (Map<String, Object>) body.get("inventory");
-
-        Inventory inventory = new Inventory((int) invMap.get("stockAvailability"));
-
-
-        Product product = new Product(
-                (String) body.get("name"),
-                (String) body.get("description"),
-                (Double) body.get("price"),
-                (String) body.get("catergory"),
-                (String) body.get("imageUrl"),
-                inventory
-        );
-
-        repo.save(product);
-
-        return ResponseEntity.ok("Successful, Probably");
-
-//        return repo.save(prod);
+    public Product addProduct(@RequestBody Product product){
+        return repo.save(product);
     }
+
+//    Get Products by Category
+    @GetMapping(value = "/", params = "category")
+    public List<Product> getProductByCategory(@RequestParam("category") String category){
+        System.out.println("-------------------------------");
+        System.out.println(category);
+        System.out.println("-------------------------------");
+        return productService.getProductsByCategory(category);
+    }
+
+    //    Search products
+    @GetMapping(value = "/", params = "search")
+    public List<Product> searchProducts(@RequestParam("search") String text){
+        return productService.searchProducts(text);
+    }
+
+//        Get All products
+    @GetMapping( "/")
+    public List<Product> getAllProducts(){
+        return productService.getAllProducts();
+    }
+
 
 }
