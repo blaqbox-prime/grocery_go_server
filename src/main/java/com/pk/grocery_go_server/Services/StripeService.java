@@ -32,9 +32,9 @@ public class StripeService {
         Customer customer = customerService.getCustomerById(order.getCustomer_id());
 
         List<String> paymentTypes = new ArrayList<>();
-        paymentTypes.add("apple-pay");
+        paymentTypes.add("apple pay");
         paymentTypes.add("card");
-        paymentTypes.add("google-pay");
+        paymentTypes.add("google pay");
 
         PaymentIntentCreateParams params =
                 PaymentIntentCreateParams.builder()
