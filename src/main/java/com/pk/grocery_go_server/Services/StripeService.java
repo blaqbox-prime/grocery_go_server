@@ -7,6 +7,9 @@ import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
 import com.stripe.model.PaymentIntent;
 import com.stripe.param.PaymentIntentCreateParams;
+import com.stripe.param.PaymentLinkCreateParams;
+import com.stripe.param.PaymentLinkUpdateParams;
+import com.stripe.param.checkout.SessionCreateParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -15,6 +18,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import com.stripe.param.PaymentIntentCreateParams.AutomaticPaymentMethods;
+
+
 
 @Service
 public class StripeService {
@@ -32,9 +38,7 @@ public class StripeService {
         Customer customer = customerService.getCustomerById(order.getCustomer_id());
 
         List<String> paymentTypes = new ArrayList<>();
-        paymentTypes.add("apple pay");
-        paymentTypes.add("card");
-        paymentTypes.add("google pay");
+        paymentTypes.add(SessionCreateParams.PaymentMethodType.CARD.getValue());
 
         PaymentIntentCreateParams params =
                 PaymentIntentCreateParams.builder()
