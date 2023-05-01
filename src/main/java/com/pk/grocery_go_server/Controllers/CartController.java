@@ -1,5 +1,6 @@
 package com.pk.grocery_go_server.Controllers;
 
+import com.pk.grocery_go_server.Models.Cart;
 import com.pk.grocery_go_server.Models.Customer;
 import com.pk.grocery_go_server.Models.Order;
 import com.pk.grocery_go_server.Models.Product;
@@ -25,6 +26,7 @@ public class CartController {
     public ResponseEntity<String> addToCart(@RequestBody Map<String,Object> body){
         String customerId = (String) body.get("customer_id");
         String productId = (String) body.get("product_id");
+        int qty = (int) body.get("quantity");
 
         // Check if the customer exists in the database
         Customer customer = customerService.getCustomerById(customerId);
@@ -38,7 +40,7 @@ public class CartController {
             return new ResponseEntity<>("Product not found", HttpStatus.BAD_REQUEST);
         }
 
-        cartService.addToCart(customer,product);
+        cartService.addToCart(customer,product,qty);
         return  new ResponseEntity<>("Product added to cart successfully", HttpStatus.OK);
     }
 
@@ -58,4 +60,41 @@ public class CartController {
 
         return  new ResponseEntity<>("Cart checked out successfully", HttpStatus.OK);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Cart> getCart(@PathVariable String id){
+
+        // Check if the customer exists in the database
+        Customer customer = customerService.getCustomerById(id);
+        if (customer == null) {
+            return new ResponseEntity<Cart>(new Cart(), HttpStatus.NOT_FOUND);
+        }
+        if(customer.getCart() == null || customer.getCart().getCartItems().isEmpty()){
+            return new ResponseEntity<Cart>(new Cart(), HttpStatus.OK);
+        }
+
+        return  new ResponseEntity<>(customer.getCart(), HttpStatus.OK);
+    }
+
+    @PostMapping("/remove-from-cart")
+    public ResponseEntity<String> RemoveFromCart(@RequestBody Map<String,Object> body){
+        String customerId = (String) body.get("customer_id");
+        String productId = (String) body.get("product_id");
+
+        // Check if the customer exists in the database
+        Customer customer = customerService.getCustomerById(customerId);
+        if (customer == null) {
+            return new ResponseEntity<>("Customer not found", HttpStatus.BAD_REQUEST);
+        }
+
+        // Check if the product exists in the database
+        Product product = cartService.getProductById(productId);
+        if (product == null) {
+            return new ResponseEntity<>("Product not found", HttpStatus.BAD_REQUEST);
+        }
+
+        cartService.RemoveFromCart(customer,product);
+        return  new ResponseEntity<>("Product removed from cart successfully", HttpStatus.OK);
+    }
+
 }

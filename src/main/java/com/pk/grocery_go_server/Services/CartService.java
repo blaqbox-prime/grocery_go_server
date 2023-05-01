@@ -7,6 +7,7 @@ import com.pk.grocery_go_server.Repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -28,14 +29,27 @@ public class CartService {
         return product.orElse(null);
     }
 
-    public void addToCart(Customer customer, Product product){
+    public void addToCart(Customer customer, Product product, int qty){
+
         CartItem cartItem = new CartItem(product);
         if (customer.getCart() == null){
             customer.setCart(new Cart());
         }
-        customer.getCart().addToCart(cartItem);
+
+        if(qty > 1) {
+            cartItem.setQuantity(qty);
+            customer.getCart().addToCart(cartItem);
+        } else {
+            customer.getCart().addToCart(cartItem);
+        }
         customerRepo.save(customer);
     }
+
+    public void RemoveFromCart(Customer customer, Product product){
+        customer.getCart().removeItem(product);
+        customerRepo.save(customer);
+    }
+
 
     //    Checkout Cart -> Creates an order from the users cart and clears the cart;
     public void checkoutCart(Customer customer, Order order){

@@ -34,7 +34,10 @@ public class Cart {
     }
 
     public void calculateTotal() {
-        this.total = cartItems.stream().mapToDouble(item -> item.getProduct().getPrice() * item.getQuantity()).sum();
+        if (cartItems.isEmpty()) setTotal(0);
+        else {
+            this.total = cartItems.stream().mapToDouble(item -> item.getProduct().getPrice() * item.getQuantity()).sum();
+        }
     }
 
     public void addToCart(CartItem item){
@@ -55,4 +58,18 @@ public class Cart {
     }
 
 
+    public void removeItem(Product product) {
+        for (int i = 0; i < this.cartItems.size(); i++) {
+            CartItem cartItem = this.cartItems.get(i);
+            if(cartItem.getProduct().compareTo(product) == 0){
+                if(cartItem.getQuantity() > 1){
+                    cartItem.decQty();
+                }else {
+                    cartItems.remove(i);
+                    break;
+                }
+            }
+        }
+        calculateTotal();
+    }
 }
