@@ -42,7 +42,7 @@ public class StripeService {
 
         PaymentIntentCreateParams params =
                 PaymentIntentCreateParams.builder()
-                        .setAmount((long) order.getTotal())
+                        .setAmount((long) order.getTotal() * 100)
                         .setCurrency("zar")
                         .addAllPaymentMethodType(paymentTypes)
                         .build();
