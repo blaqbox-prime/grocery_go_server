@@ -33,7 +33,6 @@ public class StripeService {
                 PaymentIntentCreateParams.builder()
                         .setAmount((long) order.getTotal())
                         .setCurrency("zar")
-                        .setCustomer(customer.getEmail())
                         .setAutomaticPaymentMethods(
                                 PaymentIntentCreateParams.AutomaticPaymentMethods.builder().setEnabled(true).build()
                         )
