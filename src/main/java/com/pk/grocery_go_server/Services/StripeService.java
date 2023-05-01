@@ -25,6 +25,8 @@ public class StripeService {
 
     public PaymentIntent createPaymentIntent(Order order) throws StripeException {
 
+        Stripe.apiKey = apiKey;
+
         Customer customer = customerService.getCustomerById(order.getCustomer_id());
 
         PaymentIntentCreateParams params =
