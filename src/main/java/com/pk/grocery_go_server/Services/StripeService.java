@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -29,13 +31,16 @@ public class StripeService {
 
         Customer customer = customerService.getCustomerById(order.getCustomer_id());
 
+        List<String> paymentTypes = new ArrayList<>();
+        paymentTypes.add("apple-pay");
+        paymentTypes.add("card");
+        paymentTypes.add("google-pay");
+
         PaymentIntentCreateParams params =
                 PaymentIntentCreateParams.builder()
                         .setAmount((long) order.getTotal())
                         .setCurrency("zar")
-                        .setAutomaticPaymentMethods(
-                                PaymentIntentCreateParams.AutomaticPaymentMethods.builder().setEnabled(true).build()
-                        )
+                        .addAllPaymentMethodType(paymentTypes)
                         .build();
 
         PaymentIntent paymentIntent = PaymentIntent.create(params);
