@@ -1,14 +1,25 @@
 package com.pk.grocery_go_server.Models;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@Setter
+@ToString
+@Document
 public class Cart {
     private List<CartItem> cartItems = new ArrayList<>();
+    private double total = 0;
 
     public List<CartItem> getCartItems() {
         return cartItems;
     }
+
 
     public void setCartItems(List<CartItem> cartItems) {
         this.cartItems = cartItems;
@@ -19,27 +30,29 @@ public class Cart {
 
     public Cart(List<CartItem> cartItems) {
         this.cartItems = cartItems;
+        calculateTotal();
+    }
+
+    public void calculateTotal() {
+        this.total = cartItems.stream().mapToDouble(item -> item.getProduct().getPrice() * item.getQuantity()).sum();
     }
 
     public void addToCart(CartItem item){
-//        check if item exists
-        boolean exists = this.cartItems.stream()
-                .anyMatch(cartItem ->  cartItem.getProduct().get_id() == item.getProduct().get_id());
+    boolean exists = false;
 
-//        if not then add
-        if(exists){
-            int idx;
-            for (int i = 0; i < cartItems.size(); i++){
-                if(cartItems.get(i).getProduct().get_id().equals(item.getProduct().get_id())){
-                    cartItems.get(i).incQty();
-                }
+        for (int i = 0; i < this.cartItems.size(); i++) {
+            CartItem cartItem = this.cartItems.get(i);
+            if(cartItem.getProduct().compareTo(item.getProduct()) == 0){
+                exists = true;
+                cartItem.incQty();
             }
-        } else {
-            cartItems.add(item);
         }
 
-    }
+        if(!exists) cartItems.add(item);
 
-//    Remove from cart
+    calculateTotal();
+
+    }
+    
 
 }

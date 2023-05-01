@@ -7,6 +7,10 @@ import com.mongodb.client.MongoClients;
 
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
+import org.bson.codecs.configuration.CodecProvider;
+import org.bson.codecs.configuration.CodecRegistries;
+import org.bson.codecs.configuration.CodecRegistry;
+import org.bson.codecs.pojo.PojoCodecProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -21,6 +25,9 @@ import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
+
+import static com.mongodb.MongoClientSettings.getDefaultCodecRegistry;
+import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 
 //@Component
 @Configuration
@@ -52,16 +59,23 @@ public class AppConfig {
     public MongoClient mongoClient() {
 //        MongoClient mongoClient;
         String connectionString = mongoUri;
+
+        CodecProvider codecProvider = PojoCodecProvider.builder().automatic(true).build();
+        CodecRegistry codecRegistry = CodecRegistries.fromRegistries(getDefaultCodecRegistry(), fromProviders(codecProvider));
+
         ServerApi serverApi = ServerApi.builder()
                 .version(ServerApiVersion.V1)
                 .build();
         MongoClientSettings settings = MongoClientSettings.builder()
                 .applyConnectionString(new ConnectionString(connectionString))
-                .serverApi(serverApi)
+                .serverApi(serverApi).codecRegistry(codecRegistry)
                 .build();
+
+
         // Create a new client and connect to the server
         MongoClient mongoClient = MongoClients.create(settings);
             try {
+
                 // Send a ping to confirm a successful connection
                 MongoDatabase database = mongoClient.getDatabase("admin");
                 database.runCommand(new Document("ping", 1));

@@ -1,18 +1,17 @@
 package com.pk.grocery_go_server.Controllers;
 
-import com.pk.grocery_go_server.Models.Inventory;
+import com.google.gson.Gson;
 import com.pk.grocery_go_server.Models.Product;
 import com.pk.grocery_go_server.Repositories.ProductRepository;
 import com.pk.grocery_go_server.Services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/api/products")
 public class ProductController {
 
@@ -51,7 +50,10 @@ public class ProductController {
 //        Get All products
     @GetMapping( "/")
     public List<Product> getAllProducts(){
+        System.out.println("This Endpoint Hit!!!!!!!!");
+        Gson gson = new Gson();
         return productService.getAllProducts();
+
     }
 
 

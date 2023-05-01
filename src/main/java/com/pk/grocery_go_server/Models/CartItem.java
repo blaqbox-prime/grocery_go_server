@@ -4,10 +4,10 @@ public class CartItem {
     private Product product;
     private int quantity = 1;
 
-    public void incQty(){quantity++;}
+    public void incQty(){this.quantity++;}
     public void decQty(){
         if(this.quantity > 0 ){
-            quantity--;
+           this.quantity--;
         }
     }
 
