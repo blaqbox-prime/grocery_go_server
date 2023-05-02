@@ -26,7 +26,9 @@ public class CartController {
     public ResponseEntity<String> addToCart(@RequestBody Map<String,Object> body){
         String customerId = (String) body.get("customer_id");
         String productId = (String) body.get("product_id");
-        int qty = (Integer) body.get("quantity");
+        double quantity = (Double) body.get("quantity");
+
+        int qty = (int) quantity;
 
         // Check if the customer exists in the database
         Customer customer = customerService.getCustomerById(customerId);
