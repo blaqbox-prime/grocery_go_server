@@ -24,11 +24,6 @@ public class CartService {
     private OrderRepository orderRepo;
 
 
-    public Product getProductById(String id){
-        Optional<Product> product = productRepo.findById(id);
-        return product.orElse(null);
-    }
-
     public void addToCart(Customer customer, Product product, int qty){
 
         CartItem cartItem = new CartItem(product);
@@ -67,5 +62,10 @@ public class CartService {
         customerRepo.save(customer);
 
         orderRepo.save(order);
+    }
+
+    public void clearCart(Customer customer){
+        customer.setCart(new Cart());
+        customerRepo.save(customer);
     }
 }

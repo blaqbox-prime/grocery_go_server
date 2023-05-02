@@ -22,6 +22,8 @@ public class Order {
     private String id;
     private LocalDateTime date;
     private PaymentMethod paymentMethod;
+
+    private String deliveryStatus = "Ready";
     private Address address;
     private String customer_id;
     private List<OrderItem> items = new ArrayList<>();

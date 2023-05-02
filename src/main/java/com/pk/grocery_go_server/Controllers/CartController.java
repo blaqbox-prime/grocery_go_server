@@ -6,6 +6,7 @@ import com.pk.grocery_go_server.Models.Order;
 import com.pk.grocery_go_server.Models.Product;
 import com.pk.grocery_go_server.Services.CartService;
 import com.pk.grocery_go_server.Services.CustomerService;
+import com.pk.grocery_go_server.Services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,9 @@ import java.util.Map;
 public class CartController {
     @Autowired
     CartService cartService;
+
+    @Autowired
+    ProductService productService;
 
     @Autowired
     CustomerService customerService;
@@ -37,7 +41,7 @@ public class CartController {
         }
 
         // Check if the product exists in the database
-        Product product = cartService.getProductById(productId);
+        Product product = productService.getProductById(productId);
         if (product == null) {
             return new ResponseEntity<>("Product not found", HttpStatus.BAD_REQUEST);
         }
@@ -90,13 +94,27 @@ public class CartController {
         }
 
         // Check if the product exists in the database
-        Product product = cartService.getProductById(productId);
+        Product product = productService.getProductById(productId);
         if (product == null) {
             return new ResponseEntity<>("Product not found", HttpStatus.BAD_REQUEST);
         }
 
         cartService.RemoveFromCart(customer,product);
         return  new ResponseEntity<>("Product removed from cart successfully", HttpStatus.OK);
+    }
+
+    @PostMapping("/clear")
+    public ResponseEntity<String> clearCart(@RequestBody Map<String,Object> body){
+        String customerId = (String) body.get("customer_id");
+
+        // Check if the customer exists in the database
+        Customer customer = customerService.getCustomerById(customerId);
+        if (customer == null) {
+            return new ResponseEntity<>("Customer not found", HttpStatus.BAD_REQUEST);
+        }
+
+        cartService.clearCart(customer);
+        return  new ResponseEntity<>("cart cleared successfully", HttpStatus.OK);
     }
 
 }

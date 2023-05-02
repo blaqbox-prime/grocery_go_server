@@ -23,6 +23,16 @@ public class CustomerService {
         return customer.orElse(null);
     }
 
+    public Customer updateDetails(String id, Customer newDetails){
+        Customer customer = getCustomerById(id);
+
+        if(customer != null){
+            customerRepository.save(newDetails);
+            return customer;
+        }
+        return customer;
+    }
+
 //    Create Shopping List
     public ShoppingList addShoppingList(String customerId, ShoppingList list){
 

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductService {
@@ -35,6 +36,11 @@ public class ProductService {
     public List<Product> getAllProducts() {
         List<Product> products = productRepo.findAll();
         return products;
+    }
+
+    public Product getProductById(String id){
+        Optional<Product> product = productRepo.findById(id);
+        return product.orElse(null);
     }
 
     public List<Product> getProductsByCategory(String category) {

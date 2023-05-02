@@ -5,6 +5,8 @@ import com.pk.grocery_go_server.Models.Product;
 import com.pk.grocery_go_server.Repositories.ProductRepository;
 import com.pk.grocery_go_server.Services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -56,5 +58,16 @@ public class ProductController {
 
     }
 
+    @GetMapping("/remove/{id}")
+    public ResponseEntity<String> removeProductListing(@PathVariable String id){
+        // Check if the product exists in the database
+        Product product = productService.getProductById(id);
+        if (product == null) {
+            return new ResponseEntity<>("Product not found", HttpStatus.BAD_REQUEST);
+        }
+//        Remove Product from database
+        repo.deleteById(id);
+        return  new ResponseEntity<>("Product Deleted successfully", HttpStatus.OK);
+    }
 
 }
