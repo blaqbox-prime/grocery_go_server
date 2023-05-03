@@ -9,7 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -58,16 +60,37 @@ public class ProductController {
 
     }
 
-    @GetMapping("/remove/{id}")
-    public ResponseEntity<String> removeProductListing(@PathVariable String id){
+    @DeleteMapping("/{id}/delete-product")
+    public ResponseEntity<Map<String,Object>> removeProductListing(@PathVariable String id){
+
+        Map<String,Object>  responseBody = new HashMap<>();
+
         // Check if the product exists in the database
         Product product = productService.getProductById(id);
+
         if (product == null) {
-            return new ResponseEntity<>("Product not found", HttpStatus.BAD_REQUEST);
+            responseBody.put("error","Product not found");
+            return new ResponseEntity<>(responseBody, HttpStatus.BAD_REQUEST);
         }
 //        Remove Product from database
         repo.deleteById(id);
-        return  new ResponseEntity<>("Product Deleted successfully", HttpStatus.OK);
+        responseBody.put("message","Product Deleted successfully");
+        responseBody.put("data", product);
+        return  new ResponseEntity<>(responseBody, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete-all")
+    public ResponseEntity<Map<String,Object>> removeAllProducts(){
+//      Remove Product from database
+        Map<String,Object> responseBody = new HashMap<>();
+        responseBody.put("message","Products Deleted successfully");
+        repo.deleteAll();
+        return  new ResponseEntity<>(responseBody, HttpStatus.OK);
+    }
+
+    @PatchMapping("/update")
+    public Product updateProduct(@RequestBody Product product){
+        return repo.save(product);
     }
 
 }

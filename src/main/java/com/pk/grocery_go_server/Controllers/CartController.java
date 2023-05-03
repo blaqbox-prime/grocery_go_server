@@ -4,6 +4,7 @@ import com.pk.grocery_go_server.Models.Cart;
 import com.pk.grocery_go_server.Models.Customer;
 import com.pk.grocery_go_server.Models.Order;
 import com.pk.grocery_go_server.Models.Product;
+import com.pk.grocery_go_server.Repositories.CustomerRepository;
 import com.pk.grocery_go_server.Services.CartService;
 import com.pk.grocery_go_server.Services.CustomerService;
 import com.pk.grocery_go_server.Services.ProductService;
@@ -12,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -25,6 +27,27 @@ public class CartController {
 
     @Autowired
     CustomerService customerService;
+
+    @Autowired
+    CustomerRepository customerRepository;
+
+    @PostMapping("/{id}/update")
+    public ResponseEntity<Map<String,Object>> updateCart(@PathVariable String id, @RequestBody Cart cart){
+        Map<String,Object> responseBody = new HashMap<>();
+
+        Customer customer = customerService.getCustomerById(id);
+        if (customer == null) {
+            responseBody.put("error", "Customer not found");
+            responseBody.put("data", null);
+            return new ResponseEntity<>(responseBody, HttpStatus.BAD_REQUEST);
+        }else {
+            customer.setCart(cart);
+            responseBody.put("message","Cart Successfully Updated");
+            responseBody.put("data", cart);
+            customerRepository.save(customer);
+            return new ResponseEntity<>(responseBody, HttpStatus.OK);
+        }
+    }
 
     @PostMapping("/add-to-cart")
     public ResponseEntity<String> addToCart(@RequestBody Map<String,Object> body){

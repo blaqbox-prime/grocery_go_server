@@ -6,6 +6,9 @@ import com.pk.grocery_go_server.Repositories.OrderRepository;
 import com.pk.grocery_go_server.Services.CustomerService;
 import com.pk.grocery_go_server.Services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,9 +29,19 @@ public class OrderController {
     @Autowired
     OrderService orderService;
 
+    @Autowired
+    MongoTemplate mongoTemplate;
+
+
     @GetMapping("/")
     public List<Order> getAllOrders(){
         return orderRepository.findAll();
+    }
+
+    @GetMapping(path = "/", params = "status")
+    public List<Order> getOrdersByStatus(@RequestParam String status){
+        Query query = new Query(Criteria.where("deliveryStatus").is(status));
+        return mongoTemplate.find(query, Order.class);
     }
 
     @GetMapping("/{customerId}/all")
