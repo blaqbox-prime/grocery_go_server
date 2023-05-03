@@ -10,6 +10,7 @@ import com.stripe.param.PaymentIntentCreateParams;
 import com.stripe.param.PaymentLinkCreateParams;
 import com.stripe.param.PaymentLinkUpdateParams;
 import com.stripe.param.checkout.SessionCreateParams;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -21,12 +22,16 @@ import java.util.Map;
 import com.stripe.param.PaymentIntentCreateParams.AutomaticPaymentMethods;
 
 
-
+@Getter
 @Service
 public class StripeService {
 
     @Value("${stripe.sk}")
     private String apiKey;
+
+    @Value("${stripe.pk}")
+    private String publishableKey;
+
 
     @Autowired
     CustomerService customerService;
