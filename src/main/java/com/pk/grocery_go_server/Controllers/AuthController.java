@@ -1,7 +1,9 @@
 package com.pk.grocery_go_server.Controllers;
 
 import com.pk.grocery_go_server.Models.Customer;
+import com.pk.grocery_go_server.Models.User;
 import com.pk.grocery_go_server.Repositories.CustomerRepository;
+import com.pk.grocery_go_server.Services.AuthService;
 import com.pk.grocery_go_server.Services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +22,18 @@ public class AuthController {
     @Autowired
     CustomerService customerService;
 
+    @Autowired
+    AuthService authService;
+
+    @PostMapping("/sign-up")
+    public ResponseEntity<User> signUpUser(@RequestBody User body){
+        try {
+           User user = authService.createUser(body.getEmail(), body.getPassword(),body.getRole());
+           return new ResponseEntity<>(user,HttpStatus.OK);
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
 
     @PostMapping("/create-customer")
     public Customer createCustomer(@RequestBody Customer body){

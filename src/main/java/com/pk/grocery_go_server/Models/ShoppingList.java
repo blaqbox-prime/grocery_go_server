@@ -12,9 +12,12 @@ import java.util.TreeSet;
 @AllArgsConstructor
 public class ShoppingList {
     private String title;
-    private TreeSet<Product> items;
+    private List<Product> items;
 
     public boolean addItem(Product product){
         return items.add(product);
+    }
+    public boolean removeItem(Product product){
+        return items.remove(product);
     }
 }
