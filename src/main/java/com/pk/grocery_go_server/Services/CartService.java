@@ -48,20 +48,24 @@ public class CartService {
 
     //    Checkout Cart -> Creates an order from the users cart and clears the cart;
     public void checkoutCart(Customer customer, Order order){
-        Cart cart = customer.getCart();
-        order.setCustomer_id(customer.get_id());
-        order.setItems(
-                cart.getCartItems()
-                        .stream()
-                        .map(item -> new OrderItem(item.getProduct(),item.getQuantity()))
-                        .collect(Collectors.toList())
-        );
-        order.calculateTotal();
+        try{
+            Cart cart = customer.getCart();
+            order.setCustomer_id(customer.get_id());
+            order.setItems(
+                    cart.getCartItems()
+                            .stream()
+                            .map(item -> new OrderItem(item.getProduct(),item.getQuantity()))
+                            .collect(Collectors.toList())
+            );
+            order.calculateTotal();
 
-        customer.setCart(new Cart());
-        customerRepo.save(customer);
+            customer.setCart(new Cart());
+            customerRepo.save(customer);
 
-        orderRepo.save(order);
+            orderRepo.save(order);
+        } catch(Exception e){
+            System.out.println("Checkout Exception: " + e.getMessage());
+        }
     }
 
     public void clearCart(Customer customer){

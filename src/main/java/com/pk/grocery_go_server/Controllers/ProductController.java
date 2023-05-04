@@ -54,7 +54,7 @@ public class ProductController {
 //        Get All products
     @GetMapping( "/")
     public List<Product> getAllProducts(){
-        System.out.println("This Endpoint Hit!!!!!!!!");
+
         Gson gson = new Gson();
         return productService.getAllProducts();
 

@@ -9,6 +9,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -20,7 +21,7 @@ import java.util.List;
 public class Order {
     @Id
     private String id;
-    private LocalDateTime date;
+    private Date date;
     private PaymentMethod paymentMethod;
 
     private String deliveryStatus = "Ready";
@@ -29,7 +30,7 @@ public class Order {
     private List<OrderItem> items = new ArrayList<>();
     private double total = 0;
 
-    public Order(LocalDateTime date, PaymentMethod paymentMethod, Address address, String customer_id) {
+    public Order(Date date, PaymentMethod paymentMethod, Address address, String customer_id) {
         this.date = date;
         this.paymentMethod = paymentMethod;
         this.address = address;

@@ -75,7 +75,7 @@ public class CartController {
 
     @PostMapping("/checkout/{id}")
     public ResponseEntity<String> checkoutCart(@RequestBody Order order ,@PathVariable String id){
-
+        System.out.println(order.toString());
         // Check if the customer exists in the database
         Customer customer = customerService.getCustomerById(id);
         if (customer == null) {
