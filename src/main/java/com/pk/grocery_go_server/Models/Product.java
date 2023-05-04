@@ -32,7 +32,7 @@ public class Product implements Comparable<Product> {
         this.price = price;
     }
 
-    private String imageUrl;
+    private String image;
 
     private Inventory inventory;
 
