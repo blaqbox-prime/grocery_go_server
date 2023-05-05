@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -32,6 +33,18 @@ public class AuthController {
            return new ResponseEntity<>(user,HttpStatus.OK);
         } catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+    @PostMapping("/sign-in")
+    public ResponseEntity<Object> signInUser(@RequestBody Map<String,String> body){
+        try {
+            Customer user = authService.authenticate(body.get("email"), body.get("password"));
+            return new ResponseEntity<>(user,HttpStatus.OK);
+        } catch (Exception e){
+            Map<String, Object> map = new HashMap<>();
+            map.put("message",e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(map);
         }
     }
 

@@ -23,6 +23,10 @@ public class CustomerService {
         return customer.orElse(null);
     }
 
+    public Customer findCustomerByEmail(String email) {
+        return customerRepository.findByEmail(email);
+    }
+
     public Customer updateDetails(String id, Customer newDetails){
         Customer customer = getCustomerById(id);
 
