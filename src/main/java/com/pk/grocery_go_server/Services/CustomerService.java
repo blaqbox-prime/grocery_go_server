@@ -4,6 +4,7 @@ import com.pk.grocery_go_server.Models.Customer;
 import com.pk.grocery_go_server.Models.Product;
 import com.pk.grocery_go_server.Models.ShoppingList;
 import com.pk.grocery_go_server.Repositories.CustomerRepository;
+import com.pk.grocery_go_server.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,10 @@ public class CustomerService {
     @Autowired
     CustomerRepository customerRepository;
 
-    public Customer getCustomerById(String id){
+    @Autowired
+    UserRepository userRepository;
+
+    public Customer getCustomerById(String id) {
         Optional<Customer> customer = customerRepository.findById(id);
         return customer.orElse(null);
     }
@@ -28,48 +32,49 @@ public class CustomerService {
         return customerRepository.findByEmail(email);
     }
 
-    public Customer updateDetails(String id, Customer newDetails){
-        Customer customer = getCustomerById(id);
+    public Customer updateDetails(String email, Customer newDetails) {
 
-        if(customer != null){
+        Customer customer = customerRepository.findByEmail(email);
+
+        if (customer != null) {
             customerRepository.save(newDetails);
             return customer;
         }
         return customer;
     }
 
-//    Create Shopping List
-    public ShoppingList addShoppingList(String customerId, ShoppingList list){
+    //    Create Shopping List
+    public ShoppingList addShoppingList(String customerId, ShoppingList list) {
 
         Optional<Customer> customer = Optional.ofNullable(getCustomerById(customerId));
 
-        if(customer.isPresent()){
+        if (customer.isPresent()) {
             customer.get().getShoppingLists().add(list);
             customerRepository.save(customer.get());
             return list;
-        }
-        else {
-            return  null;
+        } else {
+            return null;
         }
 
     }
 
-    public ShoppingList addItemToShoppingList(String id, String listName, Product body) {
-        Optional<Customer> customer = Optional.ofNullable(getCustomerById(id));
+    public ShoppingList addItemToShoppingList(String email, String listName, Product body) {
+        Optional<Customer> customer = Optional.ofNullable(findCustomerByEmail(email));
 
-        if(customer.isPresent()){
+        if (customer.isPresent()) {
             ShoppingList list = customer.get().getShoppingLists()
                     .stream()
-                    .filter(shoppingList -> Objects.equals(shoppingList.getTitle().toLowerCase(), listName.replace('-',' ')))
+                    .filter(shoppingList -> Objects.equals(shoppingList.getTitle().toLowerCase(), listName.replace('-', ' ')))
                     .collect(Collectors.toList()).get(0);
 
 //            If product already in list, Do not Add it
-           boolean added = list.addItem(body);
-           if (!added) return null;
-            customerRepository.save(customer.get());
-            return list;
-        }
-        else {
+            if (!list.getItems().contains(body)) {
+                customerRepository.save(customer.get());
+                return list;
+            } else {
+                return null;
+            }
+        } else {
             return  null;
         }
     }

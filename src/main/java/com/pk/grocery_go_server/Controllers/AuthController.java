@@ -54,9 +54,9 @@ public class AuthController {
         return repo.save(body);
     }
 
-    @PostMapping("/update-customer/{id}")
-    public Customer updateCustomer(@PathVariable String id, @RequestBody Customer newDetails){
-        return customerService.updateDetails(id, newDetails);
+    @PostMapping("/update-customer/{email}")
+    public Customer updateCustomer(@PathVariable String email, @RequestBody Customer newDetails){
+        return customerService.updateDetails(email, newDetails);
     }
 
 
