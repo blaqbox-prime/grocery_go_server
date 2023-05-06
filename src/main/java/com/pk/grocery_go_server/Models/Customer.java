@@ -25,13 +25,15 @@ public class Customer {
     private String LastName;
 
     @DBRef
-    User user;
+    private User user;
 
     @Indexed(unique = true)
     private String email;
 
     @Indexed(unique = true)
     private String phone;
+
+    private String image;
 
     private Cart cart = null;
     private Address address = null;

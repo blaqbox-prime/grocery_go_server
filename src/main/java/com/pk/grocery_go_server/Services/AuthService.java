@@ -21,18 +21,12 @@ public class AuthService {
 
     public Object createUser(String username, String password, String role) {
 
+//        Hash Password
         String hashedPassword = BCrypt.hashpw(password,BCrypt.gensalt());
-
+//
+//        Create User
         User user = new User(username, hashedPassword, role);
         User savedUser = userRepository.save(user);
-
-//       If role == customer then create customer profile
-        if(role.equals("customer")){
-            Customer customer = new Customer();
-            customer.setEmail(savedUser.getEmail());
-            customer.setUser(savedUser);
-            return customerRepository.save(customer);
-        }
         return savedUser;
     }
 
