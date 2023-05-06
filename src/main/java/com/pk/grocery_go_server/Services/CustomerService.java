@@ -24,6 +24,7 @@ public class CustomerService {
     }
 
     public Customer findCustomerByEmail(String email) {
+
         return customerRepository.findByEmail(email);
     }
 

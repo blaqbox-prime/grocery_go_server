@@ -27,9 +27,9 @@ public class AuthController {
     AuthService authService;
 
     @PostMapping("/sign-up")
-    public ResponseEntity<User> signUpUser(@RequestBody User body){
+    public ResponseEntity<Object> signUpUser(@RequestBody User body){
         try {
-           User user = authService.createUser(body.getEmail(), body.getPassword(),body.getRole());
+           Object user = authService.createUser(body.getEmail(), body.getPassword(),body.getRole());
            return new ResponseEntity<>(user,HttpStatus.OK);
         } catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -39,7 +39,7 @@ public class AuthController {
     @PostMapping("/sign-in")
     public ResponseEntity<Object> signInUser(@RequestBody Map<String,String> body){
         try {
-            Customer user = authService.authenticate(body.get("email"), body.get("password"));
+            User user = (User) authService.authenticate(body.get("email"), body.get("password"));
             return new ResponseEntity<>(user,HttpStatus.OK);
         } catch (Exception e){
             Map<String, Object> map = new HashMap<>();

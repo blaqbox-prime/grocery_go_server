@@ -4,6 +4,7 @@ import com.pk.grocery_go_server.Models.Customer;
 import com.pk.grocery_go_server.Models.User;
 import com.pk.grocery_go_server.Repositories.CustomerRepository;
 import com.pk.grocery_go_server.Repositories.UserRepository;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
@@ -18,20 +19,36 @@ public class AuthService {
 
 
 
-    public User createUser(String username, String password, String role) {
-        User user = new User(username, password, role);
-        return userRepository.save(user);
+    public Object createUser(String username, String password, String role) {
+
+        String hashedPassword = BCrypt.hashpw(password,BCrypt.gensalt());
+
+        User user = new User(username, hashedPassword, role);
+        User savedUser = userRepository.save(user);
+
+//       If role == customer then create customer profile
+        if(role.equals("customer")){
+            Customer customer = new Customer();
+            customer.setEmail(savedUser.getEmail());
+            customer.setUser(savedUser);
+            return customerRepository.save(customer);
+        }
+        return savedUser;
     }
 
-    public Customer authenticate(String email, String password) throws Exception {
-        Customer user = customerRepository.findByEmail(email);
+    public Object authenticate(String email, String password) throws Exception {
+        User user = userRepository.findByEmail(email);
         if (user == null) {
             throw new Exception("User not found");
         }
-        if (!(password.equals(user.getPassword()))) {
+        if (!BCrypt.checkpw(password,user.getPassword())) {
             throw new Exception("Invalid password");
         }
-        return user;
+        if(user.getRole() == "customer"){
+            return customerRepository.findByEmail(email);
+        }else {
+            return user;
+        }
     }
 
     public boolean isAdmin(User user) {
