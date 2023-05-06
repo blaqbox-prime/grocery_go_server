@@ -32,7 +32,9 @@ public class AuthController {
            Object user = authService.createUser(body.getEmail(), body.getPassword(),body.getRole());
            return new ResponseEntity<>(user,HttpStatus.OK);
         } catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            Map<String,Object> map = new HashMap<>();
+            map.put("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(map);
         }
     }
 
