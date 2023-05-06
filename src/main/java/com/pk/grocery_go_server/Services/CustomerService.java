@@ -37,10 +37,11 @@ public class CustomerService {
         Customer customer = customerRepository.findByEmail(email);
 
         if (customer != null) {
+            newDetails.set_id(customer.get_id());
             customerRepository.save(newDetails);
             return customer;
         }
-        return customer;
+        return null;
     }
 
     //    Create Shopping List
