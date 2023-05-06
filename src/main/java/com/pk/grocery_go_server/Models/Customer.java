@@ -22,7 +22,7 @@ public class Customer {
     @Id
     private String _id;
     private String firstName;
-    private String LastName;
+    private String lastName;
 
     @DBRef
     private User user;
