@@ -90,7 +90,7 @@ public class AuthController {
                 customer.setFirstName(body.getFirstName());
                 customer.setLastName(body.getLastName());
                 customer.setPhone(body.getPhone());
-
+                customer.setImage(body.getImage());
                 customer.setCart(body.getCart());
                 customer.setAddress(body.getAddress());
                 customer.setShoppingLists(body.getShoppingLists());
