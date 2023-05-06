@@ -29,12 +29,11 @@ public class Customer {
 
     @Indexed(unique = true)
     private String email;
-    private String password;
 
     @Indexed(unique = true)
     private String phone;
 
-    private Cart cart;
-    private Address address;
+    private Cart cart = null;
+    private Address address = null;
     private List<ShoppingList> shoppingLists = new ArrayList<>();
 }

@@ -57,8 +57,16 @@ public class AuthController {
     }
 
     @PostMapping("/update-customer/{email}")
-    public Customer updateCustomer(@PathVariable String email, @RequestBody Customer newDetails){
-        return customerService.updateDetails(email, newDetails);
+    public ResponseEntity<Object> updateCustomer(@PathVariable String email, @RequestBody Customer newDetails){
+        System.out.println(email);
+        try{
+            Customer customer = customerService.updateDetails(email, newDetails);
+            return new ResponseEntity<>(customer, HttpStatus.OK);
+        }catch(Exception e){
+            Map<String,Object> map = new HashMap<>();
+            map.put("message", e.getMessage());
+            return new ResponseEntity<>(map, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 
