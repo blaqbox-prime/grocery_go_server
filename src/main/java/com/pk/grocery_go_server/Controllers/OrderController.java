@@ -75,7 +75,7 @@ public class OrderController {
         return new ResponseEntity<>("Failed to cancel order", HttpStatus.NOT_MODIFIED);
     }
 
-    @PatchMapping("/{orderId}")
+    @PatchMapping("/{id}")
     public ResponseEntity<Object> updateOrder(@PathVariable String id, Order updatedOrder){
         Order order = orderService.getOrderById(id);
         Map<String,Object> map = new HashMap<>();
