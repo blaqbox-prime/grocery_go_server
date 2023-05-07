@@ -4,6 +4,7 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @ToString
@@ -28,6 +29,7 @@ public class Product implements Comparable<Product> {
     private String description;
     private double price;
     private String category;
+    private int rating = 3;
     public void setPrice(double price) {
         this.price = price;
     }
@@ -35,6 +37,8 @@ public class Product implements Comparable<Product> {
     private String image;
 
     private Inventory inventory;
+
+    List<Review> reviews = new ArrayList<>();
 
     @Override
     public int compareTo(Product o) {

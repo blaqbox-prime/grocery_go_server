@@ -24,9 +24,11 @@ public class Order {
     private Date date;
     private PaymentMethod paymentMethod;
 
-    private String deliveryStatus = "Ready";
+    private String deliveryStatus = "Preparing";
     private Address address;
     private String customer_id;
+
+    double deliveryFee = 0.0;
     private List<OrderItem> items = new ArrayList<>();
     private double total = 0;
 
@@ -38,6 +40,6 @@ public class Order {
     }
 
     public void calculateTotal() {
-        this.total = items.stream().mapToDouble(item -> item.getProduct().getPrice() * item.getQuantity()).sum();
+        this.total = items.stream().mapToDouble(item -> item.getProduct().getPrice() * item.getQuantity()).sum() + deliveryFee;
     }
 }

@@ -74,20 +74,26 @@ public class CartController {
     }
 
     @PostMapping("/checkout/{id}")
-    public ResponseEntity<String> checkoutCart(@RequestBody Order order ,@PathVariable String id){
+    public ResponseEntity<Object> checkoutCart(@RequestBody Order order ,@PathVariable String id){
         System.out.println(order.toString());
+
+        Map<String,Object> map = new HashMap<>();
+
         // Check if the customer exists in the database
         Customer customer = customerService.getCustomerById(id);
         if (customer == null) {
-            return new ResponseEntity<>("Customer not found", HttpStatus.NOT_FOUND);
+            map.put("message","Customer not found");
+            return new ResponseEntity<>(map, HttpStatus.NOT_FOUND);
         }
         if(customer.getCart() == null || customer.getCart().getCartItems().isEmpty()){
-            return new ResponseEntity<>("Customer cart is empty", HttpStatus.NOT_FOUND);
+            map.put("message","Customer cart is empty");
+            return new ResponseEntity<>(map, HttpStatus.NOT_FOUND);
         }
 
         cartService.checkoutCart(customer,order);
+        map.put("message","Cart checked out successfully");
 
-        return  new ResponseEntity<>("Cart checked out successfully", HttpStatus.OK);
+        return  new ResponseEntity<>(map, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -106,24 +112,29 @@ public class CartController {
     }
 
     @PostMapping("/remove-from-cart")
-    public ResponseEntity<String> RemoveFromCart(@RequestBody Map<String,Object> body){
+    public ResponseEntity<Object> RemoveFromCart(@RequestBody Map<String,Object> body){
         String customerId = (String) body.get("customer_id");
         String productId = (String) body.get("product_id");
 
+        Map<String, Object> map = new HashMap<>();
         // Check if the customer exists in the database
         Customer customer = customerService.getCustomerById(customerId);
         if (customer == null) {
-            return new ResponseEntity<>("Customer not found", HttpStatus.BAD_REQUEST);
+            map.put("message", "Customer not found");
+            return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
         }
 
         // Check if the product exists in the database
         Product product = productService.getProductById(productId);
         if (product == null) {
-            return new ResponseEntity<>("Product not found", HttpStatus.BAD_REQUEST);
+            map.put("message", "Product not found");
+            return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
         }
 
+
         cartService.RemoveFromCart(customer,product);
-        return  new ResponseEntity<>("Product removed from cart successfully", HttpStatus.OK);
+        map.put("message","Product removed from cart successfully");
+        return  new ResponseEntity<>(map, HttpStatus.OK);
     }
 
     @PostMapping("/clear")
