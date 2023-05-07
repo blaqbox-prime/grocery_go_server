@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -72,6 +73,30 @@ public class OrderController {
             }
         }
         return new ResponseEntity<>("Failed to cancel order", HttpStatus.NOT_MODIFIED);
+    }
+
+    @PatchMapping("/{orderId}")
+    public ResponseEntity<Object> updateOrder(@PathVariable String id, Order updatedOrder){
+        Order order = orderService.getOrderById(id);
+        Map<String,Object> map = new HashMap<>();
+        if (order != null) {
+            order.setPaymentMethod(updatedOrder.getPaymentMethod());
+            order.setDeliveryStatus(updatedOrder.getDeliveryStatus());
+            order.setAddress(updatedOrder.getAddress());
+            order.setTimeSlot(updatedOrder.getTimeSlot());
+            order.setDeliveryFee(updatedOrder.getDeliveryFee());
+            order.setItems(updatedOrder.getItems());
+            order.setDeliveryMethod(updatedOrder.getDeliveryMethod());
+            order.calculateTotal();
+
+            orderRepository.save(order);
+            return new ResponseEntity<>(order,HttpStatus.OK);
+        }else {
+            map.put("message","Failed to update order");
+            return new ResponseEntity<>(map,HttpStatus.NOT_MODIFIED);
+        }
+
+
     }
 
     @PostMapping("/{orderId}/update-status")
