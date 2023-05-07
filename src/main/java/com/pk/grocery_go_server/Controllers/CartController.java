@@ -113,6 +113,9 @@ public class CartController {
 
     @PostMapping("/remove-from-cart")
     public ResponseEntity<Object> RemoveFromCart(@RequestBody Map<String,Object> body){
+        System.out.println(body.get("customer_id"));
+        System.out.println(body.get("product_id"));
+
         String customerId = (String) body.get("customer_id");
         String productId = (String) body.get("product_id");
 
