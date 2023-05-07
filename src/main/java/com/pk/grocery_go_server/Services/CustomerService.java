@@ -73,7 +73,9 @@ public class CustomerService {
         if (customer.isPresent()) {
             ShoppingList list = customer.get().getShoppingLists()
                     .stream()
-                    .filter(shoppingList -> Objects.equals(shoppingList.getTitle().toLowerCase(), listName.replace('-', ' ')))
+                    .filter(shoppingList -> {
+                        return shoppingList.getTitle().toLowerCase().equals(listName.replace('-', ' '));
+                    })
                     .collect(Collectors.toList()).get(0);
 
 //            If product already in list, Do not Add it
