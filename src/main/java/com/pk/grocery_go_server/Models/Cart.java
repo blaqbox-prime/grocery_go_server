@@ -58,7 +58,7 @@ public class Cart {
     }
 
 
-    public void removeItem(Product product) {
+    public void decItem(Product product) {
         for (int i = 0; i < this.cartItems.size(); i++) {
             CartItem cartItem = this.cartItems.get(i);
             if(cartItem.getProduct().compareTo(product) == 0){
@@ -72,4 +72,18 @@ public class Cart {
         }
         calculateTotal();
     }
+
+    public void removeItem(Product product) {
+        for (int i = 0; i < this.cartItems.size(); i++) {
+            CartItem cartItem = this.cartItems.get(i);
+            if(cartItem.getProduct().compareTo(product) == 0){
+
+                    cartItems.remove(i);
+                    break;
+
+            }
+        }
+        calculateTotal();
+    }
+
 }
