@@ -135,9 +135,14 @@ public class CartController {
         }
 
 
-        cartService.RemoveFromCart(customer,product);
-        map.put("message","Product removed from cart successfully");
-        return  new ResponseEntity<>(map, HttpStatus.OK);
+        try{
+            cartService.RemoveFromCart(customer,product);
+            map.put("message","Product removed from cart successfully");
+            return  new ResponseEntity<>(map, HttpStatus.OK);
+        }catch(Exception e){
+            map.put("message",e.getMessage());
+            return  new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping("/clear")

@@ -41,6 +41,12 @@ public class CartService {
     }
 
     public void RemoveFromCart(Customer customer, Product product){
+
+//        For debugging
+        customer.toString();
+        product.toString();
+
+
         customer.getCart().removeItem(product);
         customerRepo.save(customer);
     }
