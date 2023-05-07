@@ -68,19 +68,6 @@ public class AuthController {
         }
     }
 
-//    @PostMapping("/{userid}/create-customer")
-//    public ResponseEntity<Object> createCustomer(@PathVariable String userid, @RequestBody Customer body){
-//        try {
-//            User user = userRepository.find
-//            return new ResponseEntity<>(user,HttpStatus.OK);
-//        } catch (Exception e){
-//            Map<String,Object> map = new HashMap<>();
-//            map.put("error", e.getMessage());
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(map);
-//        }
-//        return repo.save(body);
-//    }
-
     @PutMapping("/customer/{id}")
     public ResponseEntity<Object> updateCustomer(@PathVariable("id") String customerId, @RequestBody Customer body) {
         try {

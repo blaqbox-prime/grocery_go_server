@@ -27,6 +27,12 @@ public class CustomerController {
         return customerRepository.findAll();
     }
 
+    @GetMapping("/{email}")
+    public Customer getCustomer(@PathVariable String email){
+        return customerRepository.findByEmail(email);
+    }
+
+
     @PostMapping("/{id}/create-shopping-list")
     public ResponseEntity<String> createShoppingList(@RequestBody ShoppingList body, @PathVariable String id){
 
