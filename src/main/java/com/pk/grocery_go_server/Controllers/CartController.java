@@ -90,10 +90,10 @@ public class CartController {
             return new ResponseEntity<>(map, HttpStatus.NOT_FOUND);
         }
 
-        cartService.checkoutCart(customer,order);
-        map.put("message","Cart checked out successfully");
+        Order checkedOutOrder = cartService.checkoutCart(customer,order);
 
-        return  new ResponseEntity<>(map, HttpStatus.OK);
+
+        return  new ResponseEntity<>(checkedOutOrder, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

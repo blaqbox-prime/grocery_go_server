@@ -53,7 +53,7 @@ public class CartService {
 
 
     //    Checkout Cart -> Creates an order from the users cart and clears the cart;
-    public void checkoutCart(Customer customer, Order order){
+    public Order checkoutCart(Customer customer, Order order){
         try{
             Cart cart = customer.getCart();
             order.setCustomer_id(customer.get_id());
@@ -68,9 +68,11 @@ public class CartService {
             customer.setCart(new Cart());
             customerRepo.save(customer);
 
-            orderRepo.save(order);
+           Order savedOrder = orderRepo.save(order);
+           return savedOrder;
         } catch(Exception e){
             System.out.println("Checkout Exception: " + e.getMessage());
+            return null;
         }
     }
 
