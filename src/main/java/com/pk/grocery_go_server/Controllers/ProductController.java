@@ -58,7 +58,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}/delete-product")
-    public ResponseEntity<Map<String,Object>> removeProductListing(@PathVariable String id){
+    public ResponseEntity<Object> removeProductListing(@PathVariable String id){
 
         Map<String,Object>  responseBody = new HashMap<>();
 
@@ -71,9 +71,8 @@ public class ProductController {
         }
 //        Remove Product from database
         repo.deleteById(id);
-        responseBody.put("message","Product Deleted successfully");
         responseBody.put("data", product);
-        return  new ResponseEntity<>(responseBody, HttpStatus.OK);
+        return  new ResponseEntity<>(product, HttpStatus.OK);
     }
 
     @DeleteMapping("/delete-all")
@@ -134,8 +133,20 @@ public class ProductController {
         Collections.sort(products, Comparator.comparingInt(Product::getRating).reversed());
 
         return new ResponseEntity<>(products,HttpStatus.OK);
+    }
 
-
+    @GetMapping("/count")
+    public ResponseEntity<Object> getProductCount(){
+        Map<String,Object> map = new HashMap<>();
+        try {
+            List<Product> products = repo.findAll();
+            int count = products.size();
+            map.put("count", count);
+            return new ResponseEntity<>(map,HttpStatus.OK);
+        }catch(Exception e){
+            map.put("message", e.getMessage());
+            return new ResponseEntity<>(map, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 
