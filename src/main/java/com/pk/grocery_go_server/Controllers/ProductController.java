@@ -9,10 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -130,6 +127,16 @@ public class ProductController {
         }
     }
 
+    @GetMapping("/popular")
+    public ResponseEntity<Object> getPopularProducts(){
+        List<Product> products = repo.findAll();
+
+        Collections.sort(products, Comparator.comparingInt(Product::getRating).reversed());
+
+        return new ResponseEntity<>(products,HttpStatus.OK);
+
+
+    }
 
 
 }
