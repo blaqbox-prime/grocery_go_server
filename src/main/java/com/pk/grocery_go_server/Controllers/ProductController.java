@@ -88,9 +88,45 @@ public class ProductController {
         return  new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
 
-    @PatchMapping("/update")
-    public Product updateProduct(@RequestBody Product product){
-        return repo.save(product);
+    @PutMapping("/{id}")
+    public ResponseEntity<Object> updateOrCreateProduct(@PathVariable String id, @RequestBody Product product) {
+        Optional<Product> existingProduct = repo.findById(id);
+
+        try {
+            if (existingProduct.isPresent()) {
+                // Update the existing product
+                Product updatedProduct = existingProduct.get();
+                updatedProduct.setName(product.getName());
+                updatedProduct.setDescription(product.getDescription());
+                updatedProduct.setPrice(product.getPrice());
+                updatedProduct.setCategory(product.getCategory());
+                updatedProduct.setImage(product.getImage());
+                updatedProduct.setInventory(product.getInventory());
+                updatedProduct.setReviews(product.getReviews());
+
+                repo.save(updatedProduct);
+                return ResponseEntity.ok(updatedProduct);
+            } else {
+                // Create a new product
+//                Product newProduct = new Product();
+//                newProduct.setName(product.getName());
+//                newProduct.setDescription(product.getDescription());
+//                newProduct.setPrice(product.getPrice());
+//                newProduct.setCategory(product.getCategory());
+//                newProduct.setImage(product.getImage());
+//                newProduct.setInventory(product.getInventory());
+//                newProduct.setReviews(product.getReviews());
+
+                Product newProduct = repo.save(product);
+                return ResponseEntity.status(HttpStatus.CREATED).body(newProduct);
+            }
+        }catch (Exception e){
+            Map<String, Object> map = new HashMap<>();
+            map.put("message", e.getMessage());
+            return new ResponseEntity<>(map,HttpStatus.BAD_REQUEST);
+        }
     }
+
+
 
 }

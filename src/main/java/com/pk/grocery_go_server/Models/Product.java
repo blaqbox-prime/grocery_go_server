@@ -15,14 +15,6 @@ import java.util.List;
 @Document(collection = "Product")
 public class Product implements Comparable<Product> {
 
-    public String get_id() {
-        return _id;
-    }
-
-    public void set_id(String _id) {
-        this._id = _id;
-    }
-
     @Id
     private String _id;
     private String name;
