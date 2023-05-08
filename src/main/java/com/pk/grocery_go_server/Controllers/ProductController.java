@@ -94,6 +94,7 @@ public class ProductController {
 
         try {
             if (existingProduct.isPresent()) {
+                System.out.println("Updating Product");
                 // Update the existing product
                 Product updatedProduct = existingProduct.get();
                 updatedProduct.setName(product.getName());
@@ -103,6 +104,8 @@ public class ProductController {
                 updatedProduct.setImage(product.getImage());
                 updatedProduct.setInventory(product.getInventory());
                 updatedProduct.setReviews(product.getReviews());
+
+                System.out.println(updatedProduct.toString());
 
                 repo.save(updatedProduct);
                 return ResponseEntity.ok(updatedProduct);
