@@ -40,15 +40,19 @@ public class AuthController {
             // Create the user
             User newUser = (User) authService.createUser(body.getEmail(), body.getPassword(), body.getRole());
 
-            // Create the corresponding customer object
-            Customer newCustomer = new Customer();
-            newCustomer.setUser(newUser);
-            newCustomer.setEmail(newUser.getEmail());
+           if(newUser.getRole().equals("customer")){
+               // Create the corresponding customer object
+               Customer newCustomer = new Customer();
+               newCustomer.setUser(newUser);
+               newCustomer.setEmail(newUser.getEmail());
 
-            // Save the customer object to the database
-            Customer savedCustomer = customerRepository.save(newCustomer);
+               // Save the customer object to the database
+               Customer savedCustomer = customerRepository.save(newCustomer);
+               return new ResponseEntity<>(savedCustomer, HttpStatus.OK);
+           } else {
+               return new ResponseEntity<>(newUser, HttpStatus.OK);
+           }
 
-            return new ResponseEntity<>(savedCustomer, HttpStatus.OK);
         } catch (Exception e) {
             Map<String, Object> map = new HashMap<>();
             map.put("error", e.getMessage());
