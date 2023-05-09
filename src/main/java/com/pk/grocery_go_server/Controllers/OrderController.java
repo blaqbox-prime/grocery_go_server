@@ -98,7 +98,7 @@ public ResponseEntity<Object> getAllOrdersWithDeliveryStatusPreparing() {
     }
 
 //    UPDATE ORDER
-    @PatchMapping("/{id}")
+    @PostMapping("/{id}")
     public ResponseEntity<Object> updateOrder(@PathVariable String id, @RequestBody Order updatedOrder){
         Order order = orderService.getOrderById(id);
         System.out.println("-----------------------------------\nOrder From DB\n-----------------------------------");
@@ -111,7 +111,7 @@ public ResponseEntity<Object> getAllOrdersWithDeliveryStatusPreparing() {
             order.setPaymentMethod(updatedOrder.getPaymentMethod());
             order.setDeliveryStatus(updatedOrder.getDeliveryStatus());
             order.setAddress(updatedOrder.getAddress());
-            order.setTimeSlot(updatedOrder.getTimeSlot());
+
             order.setDeliveryFee(updatedOrder.getDeliveryFee());
             order.setItems(updatedOrder.getItems());
             order.setDeliveryMethod(updatedOrder.getDeliveryMethod());

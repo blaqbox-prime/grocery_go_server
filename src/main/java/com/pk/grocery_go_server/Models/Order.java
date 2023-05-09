@@ -1,10 +1,13 @@
 package com.pk.grocery_go_server.Models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pk.grocery_go_server.enums.PaymentMethod;
+import jdk.jfr.Timestamp;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.TimeSeries;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -31,7 +34,6 @@ public class Order {
 
     private String deliveryMethod;
 
-    private LocalTime timeSlot;
    private   double deliveryFee = 0.0;
     private List<OrderItem> items = new ArrayList<>();
     private double total = calculateTotal();
