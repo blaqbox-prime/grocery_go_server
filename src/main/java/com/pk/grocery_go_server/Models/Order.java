@@ -31,8 +31,7 @@ public class Order {
 
     private String deliveryMethod;
 
-    private LocalTime TimeSlot;
-
+    private LocalTime timeSlot;
     double deliveryFee = 0.0;
     private List<OrderItem> items = new ArrayList<>();
     private double total = calculateTotal();

@@ -40,7 +40,7 @@ public class StripeService {
 
         Stripe.apiKey = apiKey;
 
-        Customer customer = customerService.getCustomerById(order.getCustomer_id());
+        Customer customer = customerService.getCustomerById(order.getCustomer().get_id());
 
         List<String> paymentTypes = new ArrayList<>();
         paymentTypes.add(SessionCreateParams.PaymentMethodType.CARD.getValue());

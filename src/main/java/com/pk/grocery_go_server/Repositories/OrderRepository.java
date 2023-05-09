@@ -8,5 +8,5 @@ import java.util.List;
 public interface OrderRepository extends MongoRepository<Order,String> {
     List<Order> findByDeliveryStatus(String preparing);
 
-    List<Order> findByCustomer_id(String customerId);
+    List<Order> findByCustomer__id(String customerId);
 }

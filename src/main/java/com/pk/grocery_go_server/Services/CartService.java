@@ -54,16 +54,17 @@ public class CartService {
 
     //    Checkout Cart -> Creates an order from the users cart and clears the cart;
     public Order checkoutCart(Customer customer, Order order){
+        System.out.println(customer.toString());
         try{
             Cart cart = customer.getCart();
-            order.setCustomer_id(customer.get_id());
+            order.setCustomer(customer);
             order.setItems(
                     cart.getCartItems()
                             .stream()
                             .map(item -> new OrderItem(item.getProduct(),item.getQuantity()))
                             .collect(Collectors.toList())
             );
-            order.calculateTotal();
+//            order.calculateTotal();
 
             customer.setCart(new Cart());
             customerRepo.save(customer);
