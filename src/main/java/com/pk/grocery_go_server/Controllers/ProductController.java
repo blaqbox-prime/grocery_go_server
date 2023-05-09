@@ -126,6 +126,7 @@ public class ProductController {
         }
     }
 
+
     @GetMapping("/popular")
     public ResponseEntity<Object> getPopularProducts(){
         List<Product> products = repo.findAll();
@@ -134,6 +135,7 @@ public class ProductController {
 
         return new ResponseEntity<>(products,HttpStatus.OK);
     }
+
 
     @GetMapping("/count")
     public ResponseEntity<Object> getProductCount(){
