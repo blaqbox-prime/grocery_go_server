@@ -13,10 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @RestController
@@ -75,6 +72,32 @@ public class OrderController {
         return new ResponseEntity<>("Failed to cancel order", HttpStatus.NOT_MODIFIED);
     }
 
+//    GET ALL ORDERS THAT ARE NEW
+@GetMapping("/preparing")
+public ResponseEntity<Object> getAllOrdersWithDeliveryStatusPreparing() {
+    try {
+        List<Order> orders = orderRepository.findByDeliveryStatus("Preparing");
+        return new ResponseEntity<>(orders,HttpStatus.OK);
+    }catch(Exception e){
+        Map<String, Object> map = new HashMap<>();
+        map.put("message",e.getMessage());
+        return new ResponseEntity<>(map,HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
+
+    @GetMapping("/completed")
+    public List<Order> getAllOrdersWithDeliveryStatusCompleted() {
+        return orderRepository.findByDeliveryStatus("Completed");
+    }
+
+//    GET ORDERS BY CUSTOMER
+    @GetMapping("/orders/customer/{customerId}")
+    public List<Order> getOrdersByCustomer(@PathVariable String customerId) {
+        List<Order> orders = orderRepository.findByCustomerId(customerId);
+        return orders;
+    }
+
+//    UPDATE ORDER
     @PatchMapping("/{id}")
     public ResponseEntity<Object> updateOrder(@PathVariable String id, Order updatedOrder){
         Order order = orderService.getOrderById(id);
