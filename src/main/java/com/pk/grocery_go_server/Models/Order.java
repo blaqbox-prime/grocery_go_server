@@ -32,7 +32,7 @@ public class Order {
     private String deliveryMethod;
 
     private LocalTime timeSlot;
-    double deliveryFee = 0.0;
+   private   double deliveryFee = 0.0;
     private List<OrderItem> items = new ArrayList<>();
     private double total = calculateTotal();
 
