@@ -101,19 +101,23 @@ public ResponseEntity<Object> getAllOrdersWithDeliveryStatusPreparing() {
     @PatchMapping("/{id}")
     public ResponseEntity<Object> updateOrder(@PathVariable String id, Order updatedOrder){
         Order order = orderService.getOrderById(id);
+        System.out.println("-----------------------------------\nOrder From DB\n-----------------------------------");
+        System.out.println(order.toString());
+        System.out.println("-----------------------------------\nOrder From App\n-----------------------------------");
+        System.out.println(updatedOrder.toString());
+
         Map<String,Object> map = new HashMap<>();
         if (order != null) {
             order.setPaymentMethod(updatedOrder.getPaymentMethod());
             order.setDeliveryStatus(updatedOrder.getDeliveryStatus());
-            order.setAddress(updatedOrder.getAddress());
+//            order.setAddress(updatedOrder.getAddress());
             order.setTimeSlot(updatedOrder.getTimeSlot());
             order.setDeliveryFee(updatedOrder.getDeliveryFee());
-            order.setItems(updatedOrder.getItems());
+//            order.setItems(updatedOrder.getItems());
             order.setDeliveryMethod(updatedOrder.getDeliveryMethod());
-            order.calculateTotal();
 
-            orderRepository.save(order);
-            return new ResponseEntity<>(order,HttpStatus.OK);
+           Order savedOrder = orderRepository.save(order);
+            return new ResponseEntity<>(savedOrder,HttpStatus.OK);
         }else {
             map.put("message","Failed to update order");
             return new ResponseEntity<>(map,HttpStatus.NOT_MODIFIED);
