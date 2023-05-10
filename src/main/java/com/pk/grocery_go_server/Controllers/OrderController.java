@@ -2,6 +2,7 @@ package com.pk.grocery_go_server.Controllers;
 
 import com.pk.grocery_go_server.Models.Customer;
 import com.pk.grocery_go_server.Models.Order;
+import com.pk.grocery_go_server.Models.Product;
 import com.pk.grocery_go_server.Repositories.OrderRepository;
 import com.pk.grocery_go_server.Services.CustomerService;
 import com.pk.grocery_go_server.Services.OrderService;
@@ -85,9 +86,18 @@ public ResponseEntity<Object> getAllOrdersWithDeliveryStatusPreparing() {
     }
 }
 
-    @GetMapping("/completed")
-    public List<Order> getAllOrdersWithDeliveryStatusCompleted() {
-        return orderRepository.findByDeliveryStatus("Completed");
+    @GetMapping("/completed/count")
+    public ResponseEntity<Object> getAllOrdersWithDeliveryStatusCompleted() {
+        Map<String,Object> map = new HashMap<>();
+        try {
+            List<Order> orders = orderRepository.findByDeliveryStatus("Completed");
+            int count = orders.size();
+            map.put("count", count);
+            return new ResponseEntity<>(map,HttpStatus.OK);
+        }catch(Exception e){
+            map.put("message", e.getMessage());
+            return new ResponseEntity<>(map, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 //    GET ORDERS BY CUSTOMER
