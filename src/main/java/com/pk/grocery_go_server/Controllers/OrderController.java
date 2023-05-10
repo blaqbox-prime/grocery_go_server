@@ -93,8 +93,7 @@ public ResponseEntity<Object> getAllOrdersWithDeliveryStatusPreparing() {
 //    GET ORDERS BY CUSTOMER
     @GetMapping("/orders/customer/{customerId}")
     public List<Order> getOrdersByCustomer(@PathVariable String customerId) {
-        List<Order> orders = orderRepository.findByCustomer__id(customerId);
-        return orders;
+        return orderService.getAllCustomerOrders(customerId);
     }
 
 //    UPDATE ORDER

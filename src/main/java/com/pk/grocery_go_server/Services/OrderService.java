@@ -1,7 +1,9 @@
 package com.pk.grocery_go_server.Services;
 
 import com.mongodb.client.MongoClient;
+import com.pk.grocery_go_server.Models.Customer;
 import com.pk.grocery_go_server.Models.Order;
+import com.pk.grocery_go_server.Repositories.CustomerRepository;
 import com.pk.grocery_go_server.Repositories.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -28,8 +30,11 @@ public class OrderService {
     @Autowired
     MongoClient mongoClient;
 
+    @Autowired
+    CustomerRepository customerRepository;
     public List<Order> getAllCustomerOrders(String customerId) {
-        Query query = new Query(Criteria.where("customer_id").is(customerId));
+        Customer customer = customerRepository.findById(customerId).orElse(null);
+        Query query = new Query(Criteria.where("customer").is(customer));
         return mongoTemplate.find(query, Order.class);
     }
 
