@@ -97,7 +97,7 @@ public ResponseEntity<Object> getAllOrdersWithDeliveryStatusPreparing() {
     }
 
 //    UPDATE ORDER
-    @PostMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<Object> updateOrder(@PathVariable String id, @RequestBody Order updatedOrder){
         Order order = orderService.getOrderById(id);
         System.out.println("-----------------------------------\nOrder From DB\n-----------------------------------");
